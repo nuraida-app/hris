@@ -1,8 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Form, Input, Button, Checkbox, message } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import { useLoadUserQuery, useLoginMutation } from "../../service/auth/ApiAuth";
-import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { isAuthenticated } from "../../utils/auth";
@@ -22,29 +21,33 @@ const containerStyle = {
   justifyContent: "center",
   alignItems: "center",
   height: "100vh",
-  // --- GRADIENT BACKGROUND UNGU YANG LEBIH COCOK ---
   background: `linear-gradient(135deg, ${colors.primary} 0%, ${colors.lightPurple} 100%)`,
 };
 
 const formContainerStyle = {
   padding: "40px",
-  background: "rgba(255, 255, 255, 0.1)", // Sedikit lebih transparan
-  backdropFilter: "blur(5px)", // Blur sedikit lebih rendah agar tidak terlalu buram
-  border: "1px solid rgba(255, 255, 255, 0.15)", // Border lebih tipis
+  background: "rgba(255, 255, 255, 0.1)",
+  backdropFilter: "blur(5px)",
+  border: "1px solid rgba(255, 255, 255, 0.15)",
   borderRadius: "15px",
-  boxShadow: "0 8px 32px 0 rgba(31, 38, 135, 0.25)", // Bayangan sedikit lebih lembut
+  boxShadow: "0 8px 32px 0 rgba(31, 38, 135, 0.25)",
   width: "400px",
-  maxWidth: "90%", // Responsif untuk layar kecil
+  maxWidth: "90%",
 };
 
 const Login = () => {
   const navigate = useNavigate();
 
+  // Ambil user dari global state (UserSlice)
   const { user } = useSelector((state) => state.user);
-  const isSignin = isAuthenticated();
 
-  const [login, { isLoading, data, error, isSuccess }] = useLoginMutation();
-  const { refetch } = useLoadUserQuery(!isSuccess, {
+  // Login Mutation
+  const [login, { isLoading, isSuccess, error }] = useLoginMutation();
+
+  // Load User Query
+  // Logic: Query ini akan di-skip (tidak jalan) SELAMA login belum sukses (!isSuccess).
+  // Begitu login sukses, skip jadi false, dan query loadUser otomatis jalan.
+  useLoadUserQuery(undefined, {
     skip: !isSuccess,
   });
 
@@ -52,27 +55,27 @@ const Login = () => {
     login(values);
   };
 
+  // Effect: Menangani notifikasi Login
   useEffect(() => {
     if (isSuccess) {
-      message.success(data?.message);
-
-      refetch();
+      message.success("Login Berhasil!");
     }
-
     if (error) {
-      message.error(error?.data?.message);
+      message.error(error?.data?.message || "Terjadi kesalahan saat login");
     }
-  }, [data, error, isSuccess]);
+  }, [isSuccess, error]);
 
+  // Effect: Redirect setelah User Data masuk ke Redux
   useEffect(() => {
-    if (user && isSignin) {
+    // Cek apakah user sudah ada di state dan token valid
+    if (user && isAuthenticated()) {
       if (user.role === "admin") {
         navigate("/admin-dashboard");
       } else {
         navigate("/dashboard");
       }
     }
-  }, [user, isSignin]);
+  }, [user, navigate]);
 
   return (
     <div style={containerStyle}>
@@ -84,8 +87,6 @@ const Login = () => {
           }}
           onFinish={onFinish}
         >
-          {/* Pastikan logo Anda memiliki background transparan atau putih
-              agar menyatu dengan formContainerStyle */}
           <img
             src="/logo.png"
             alt="logo"
@@ -95,7 +96,7 @@ const Login = () => {
               maxWidth: "250px",
               display: "block",
               margin: "0 auto 24px auto",
-            }} // Logo di tengah
+            }}
           />
 
           <Form.Item
@@ -112,11 +113,10 @@ const Login = () => {
               placeholder="Username"
               size="large"
               style={{
-                backgroundColor: "rgba(255, 255, 255, 0.8)", // Input sedikit transparan
+                backgroundColor: "rgba(255, 255, 255, 0.8)",
                 borderColor: "transparent",
-                color: colors.primary, // Warna teks input
+                color: colors.primary,
               }}
-              // Override warna icon internal
               className="login-input-icon"
             />
           </Form.Item>
@@ -135,9 +135,9 @@ const Login = () => {
               placeholder="Password"
               size="large"
               style={{
-                backgroundColor: "rgba(255, 255, 255, 0.8)", // Input sedikit transparan
+                backgroundColor: "rgba(255, 255, 255, 0.8)",
                 borderColor: "transparent",
-                color: colors.primary, // Warna teks input
+                color: colors.primary,
               }}
               className="login-input-icon"
             />
@@ -164,7 +164,7 @@ const Login = () => {
               loading={isLoading}
               size="large"
               style={{
-                backgroundColor: colors.primary, // Tombol Login warna ungu utama
+                backgroundColor: colors.primary,
                 borderColor: colors.primary,
                 marginTop: "10px",
               }}
@@ -174,7 +174,6 @@ const Login = () => {
           </Form.Item>
         </Form>
       </div>
-      {/* CSS untuk icon input agar warnanya tidak ikut background Ant Design default */}
       <style>
         {`
           .login-input-icon .anticon {

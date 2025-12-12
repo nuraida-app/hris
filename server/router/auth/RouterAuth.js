@@ -61,7 +61,7 @@ router.post("/login", async (req, res) => {
           maxAge: 24 * 60 * 60 * 1000, // 1 day
         });
 
-        res.json({ message: "Berhasil Login" });
+        res.json({ message: "Berhasil Login", user: userToReturn });
       }
     );
   } catch (err) {
@@ -92,7 +92,7 @@ router.get("/load", auth, async (req, res) => {
 
     res.json(user);
   } catch (err) {
-    console.error(err.message);
+    console.error(err);
     res.status(500).send("Server Error");
   }
 });
