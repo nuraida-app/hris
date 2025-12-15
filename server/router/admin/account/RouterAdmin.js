@@ -101,7 +101,7 @@ router.post("/add", authorizeRole(["admin"]), async (req, res) => {
         ],
       });
 
-      return res.status(200).json(updated("Admin", updatedAdmin));
+      return res.status(200).json({ message: updated });
     }
 
     // --- 2. Logika CREATE (Jika ID Tidak Disediakan) ---
@@ -159,6 +159,16 @@ router.get("/:id", authorizeRole(["admin"]), async (req, res) => {
 router.delete("/:id", authorizeRole(["admin"]), async (req, res) => {
   const { id } = req.params;
   try {
+    const admin = await User.findAll({
+      where: { role: "admin" },
+    });
+
+    if (admin?.length === 1) {
+      return res
+        .status(400)
+        .json({ message: "Tidak bisa menghapus admin utama" });
+    }
+
     const deletedRows = await User.destroy({
       where: { id: id, role: "admin" },
     });

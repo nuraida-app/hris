@@ -75,11 +75,7 @@ const AddAdmin = ({ title, open, onClose, payload }) => {
           <Input placeholder="Email" />
         </Form.Item>
 
-        <Form.Item
-          name={"password"}
-          label="Password"
-          rules={[{ required: true, message: "Wajib diisi" }]}
-        >
+        <Form.Item name={"password"} label="Password">
           <Input placeholder="Password" />
         </Form.Item>
       </Form>

@@ -1,5 +1,14 @@
 import { PlusOutlined } from "@ant-design/icons";
-import { Button, Flex, Input, Space, Table, Typography } from "antd";
+import {
+  Button,
+  Flex,
+  Input,
+  message,
+  Modal,
+  Space,
+  Table,
+  Typography,
+} from "antd";
 import React, { useEffect, useState } from "react";
 import {
   useDeleteAdminMutation,
@@ -9,6 +18,7 @@ import ButtonAction from "../../../../component/actions/ButtonAction";
 import AddAdmin from "./AddAdmin";
 
 const { Title } = Typography;
+const { confirm } = Modal;
 
 const Admin = () => {
   const [page, setPage] = useState(1);
@@ -44,7 +54,18 @@ const Admin = () => {
         break;
 
       case "delete":
-        deleteDepertment(record.id);
+        confirm({
+          title: "Konfirmasi Hapus",
+          content: "Apakah Anda yakin ingin menghapus admin ini?",
+          okText: "Hapus",
+          okType: "danger",
+          cancelText: "Batal",
+          onOk: () => {
+            deleteAdmin(record.id);
+          },
+          onCancel: () => {},
+        });
+
         break;
 
       default:
@@ -58,6 +79,16 @@ const Admin = () => {
     }, 500);
     return () => clearTimeout(timer);
   }, [search]);
+
+  useEffect(() => {
+    if (isSuccess) {
+      message.success(msg.message);
+    }
+
+    if (error) {
+      message.error(error.data.message);
+    }
+  }, [msg, error, isSuccess]);
 
   const columns = [
     {
