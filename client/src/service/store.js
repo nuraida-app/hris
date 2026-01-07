@@ -4,12 +4,12 @@ import { ApiAuth } from "./auth/ApiAuth";
 import { ApiDep } from "./master/ApiDep";
 import { ApiPos } from "./master/ApiPos";
 import { ApiHoliday } from "./master/ApiHoliday";
-import { ApiAdmin } from "./admin/account/ApiAdmin";
-import { ApiEmployee } from "./admin/account/ApiEmployee";
-import { ApiAbsent } from "./admin/absent/ApiAbsent";
+import { ApiAdmin } from "./account/ApiAdmin";
+import { ApiEmployee } from "./account/ApiEmployee";
+import { ApiAbsent } from "./absent/ApiAbsent";
 import { ApiDash } from "./dashboard/ApiDash";
 import { ApiLeave } from "./master/ApiLeave";
-import { ApiDatabase } from "./admin/database/ApiDatabase";
+import { ApiDatabase } from "./database/ApiDatabase";
 
 const isDevelopment = import.meta.env.VITE_MODE === "development";
 

@@ -1,6 +1,6 @@
 import { Router } from "express";
-import authorizeRole from "../../../middleware/authorizeRole.js"; // Sesuaikan path
-import { db } from "../../../models/index.js";
+import authorizeRole from "../../middleware/authorizeRole.js"; // Sesuaikan path
+import { db } from "../../models/index.js";
 import fs from "fs";
 import path from "path";
 import archiver from "archiver";

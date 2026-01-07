@@ -15,7 +15,7 @@ import AddEmployee from "./AddEmployee";
 import {
   useGetEmployeesQuery,
   useDeleteEmployeeMutation,
-} from "../../../../service/admin/account/ApiEmployee";
+} from "../../../../service/account/ApiEmployee";
 import ButtonAction from "../../../../component/actions/ButtonAction";
 import { useSearchParams } from "react-router-dom";
 

@@ -2,7 +2,7 @@ import React from "react";
 import { ArrowLeftOutlined } from "@ant-design/icons";
 import { Button, Flex, Spin, Tabs, Typography, Card, Result } from "antd";
 import { useSearchParams } from "react-router-dom";
-import { useGetEmployeeDetailQuery } from "../../../../service/admin/account/ApiEmployee";
+import { useGetEmployeeDetailQuery } from "../../../../service/account/ApiEmployee";
 
 // Import Komponen Tab Terpisah
 import TabProfile from "../../../../component/employee/TabProfile";

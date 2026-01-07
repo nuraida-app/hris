@@ -6,15 +6,15 @@ import { fileURLToPath } from "url";
 // Router Imports
 import * as models from "./models/index.js";
 import RouterAuth from "./router/auth/RouterAuth.js";
-import RouterDep from "./router/admin/master/RouterDep.js";
-import RouterPos from "./router/admin/master/RouterPos.js";
-import RouterHoliday from "./router/admin/master/RouterHoliday.js";
-import RouterAdmin from "./router/admin/account/RouterAdmin.js";
-import RouterEmployee from "./router/admin/account/RouterEmployess.js";
+import RouterDep from "./router/master/RouterDep.js";
+import RouterPos from "./router/master/RouterPos.js";
+import RouterHoliday from "./router/master/RouterHoliday.js";
+import RouterAdmin from "./router/account/RouterAdmin.js";
+import RouterEmployee from "./router/account/RouterEmployess.js";
 import RouterAbsent from "./router/absent/RouterAbsent.js";
 import RouterDash from "./router/dashboard/RouterDash.js";
-import RouterLeave from "./router/admin/master/RouterLeave.js";
-import RouterDb from "./router/admin/database/RouterDb.js";
+import RouterLeave from "./router/master/RouterLeave.js";
+import RouterDb from "./router/database/RouterDb.js";
 
 const app = express();
 const __filename = fileURLToPath(import.meta.url);

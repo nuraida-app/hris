@@ -6,6 +6,7 @@ import {
   DatabaseOutlined,
   CarryOutOutlined,
   CloudServerOutlined,
+  UserOutlined,
 } from "@ant-design/icons";
 
 export const adminMenus = [
@@ -50,7 +51,12 @@ export const adminMenus = [
 export const userMenus = [
   {
     label: "Dashboard",
-    key: "/user-dashboard",
+    key: "/dashboard",
     icon: <WindowsOutlined />,
+  },
+  {
+    label: "Profile",
+    key: "/profile",
+    icon: <UserOutlined />,
   },
 ];

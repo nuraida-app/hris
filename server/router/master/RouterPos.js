@@ -1,12 +1,7 @@
 import { Router } from "express";
-import Position from "../../../models/master/Position.js";
-import Department from "../../../models/master/Department.js";
-import {
-  created,
-  notFound,
-  removed,
-  updated,
-} from "../../../utils/Messages.js";
+import Position from "../../models/master/Position.js";
+import Department from "../../models/master/Department.js";
+import { created, notFound, removed, updated } from "../../utils/Messages.js";
 import { Op } from "sequelize";
 
 const router = Router();

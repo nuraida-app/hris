@@ -13,7 +13,7 @@ import React, { useEffect, useState } from "react";
 import {
   useDeleteAdminMutation,
   useGetAdminsQuery,
-} from "../../../../service/admin/account/ApiAdmin";
+} from "../../../../service/account/ApiAdmin";
 import ButtonAction from "../../../../component/actions/ButtonAction";
 import AddAdmin from "./AddAdmin";
 

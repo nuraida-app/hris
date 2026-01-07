@@ -1,12 +1,7 @@
 import { Router } from "express";
-import Department from "../../../models/master/Department.js";
-import Position from "../../../models/master/Position.js";
-import {
-  created,
-  notFound,
-  removed,
-  updated,
-} from "../../../utils/Messages.js";
+import Department from "../../models/master/Department.js";
+import Position from "../../models/master/Position.js";
+import { created, notFound, removed, updated } from "../../utils/Messages.js";
 
 const router = Router();
 

@@ -32,9 +32,9 @@ import {
   useUpdateAbsentMutation,
   useDeleteAbsentMutation,
   useImportAbsentMutation,
-} from "../../../service/admin/absent/ApiAbsent";
+} from "../../../service/absent/ApiAbsent";
 // Asumsi anda punya hook untuk get list employee untuk dropdown
-import { useGetEmployeesQuery } from "../../../service/admin/account/ApiEmployee";
+import { useGetEmployeesQuery } from "../../../service/account/ApiEmployee";
 
 const { RangePicker } = DatePicker;
 const { Option } = Select;

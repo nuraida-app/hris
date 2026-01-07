@@ -16,6 +16,9 @@ const Master = lazy(() => import("./module/admin/master/Master"));
 const Account = lazy(() => import("./module/admin/account/Account"));
 const Database = lazy(() => import("./module/admin/database/Database"));
 
+// Employee
+import { Dashboard, Profile } from "./module/employee";
+
 const App = () => {
   const dispatch = useDispatch();
 
@@ -83,6 +86,10 @@ const App = () => {
           <Route path="/admin-absensi" element={<Absent />} />
 
           <Route path="/admin-database" element={<Database />} />
+
+          <Route path="/dashboard" element={<Dashboard />} />
+
+          <Route path="/profile" element={<Profile />} />
         </Routes>
       </Suspense>
     </BrowserRouter>

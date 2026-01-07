@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { Form, Input, Button, Row, Col, message, Flex } from "antd";
-import { useSaveEmployeeMutation } from "../../service/admin/account/ApiEmployee";
+import { useSaveEmployeeMutation } from "../../service/account/ApiEmployee";
 
 const TabPayroll = ({ data }) => {
   const [form] = Form.useForm();

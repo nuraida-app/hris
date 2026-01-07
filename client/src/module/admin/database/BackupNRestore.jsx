@@ -5,7 +5,7 @@ import {
   InboxOutlined,
   ExclamationCircleOutlined,
 } from "@ant-design/icons";
-import { useRestoreDbMutation } from "../../../service/admin/database/ApiDatabase";
+import { useRestoreDbMutation } from "../../../service/database/ApiDatabase";
 
 const { Dragger } = Upload;
 

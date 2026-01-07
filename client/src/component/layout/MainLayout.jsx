@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { adminMenus, userMenus } from "./Menus";
+import { useLogoutMutation } from "../../service/auth/ApiAuth";
 
 const { Header, Sider, Footer, Content } = Layout;
 
@@ -24,6 +25,8 @@ const MainLayout = ({ children, title }) => {
   const navigate = useNavigate();
 
   const { user } = useSelector((state) => state.user);
+
+  const [logout, { data, error, isLoading, isSuccess }] = useLogoutMutation();
 
   const [isMobile, setIsMobile] = useState(false);
   const [drawerVisible, setDrawerVisible] = useState(false);
@@ -43,11 +46,22 @@ const MainLayout = ({ children, title }) => {
       setDrawerVisible(false);
     }
     if (key === "logout") {
-      message.info("logout");
+      logout();
     } else {
       navigate(key);
     }
   };
+
+  useEffect(() => {
+    if (isSuccess) {
+      message.success(data?.message);
+      navigate("/");
+    }
+
+    if (error) {
+      message.error(error?.data?.message);
+    }
+  }, [data, error, isSuccess]);
 
   const sidebarContent = (
     <>
@@ -249,7 +263,7 @@ const MainLayout = ({ children, title }) => {
           style={{
             textAlign: "center",
             background: "transparent",
-            color: "#888",
+            color: colors.textDark,
           }}
         >
           <span>&copy; {new Date().getFullYear()}</span> NIBS

@@ -21,7 +21,7 @@ import {
 import {
   useSaveTrainingMutation,
   useDeleteTrainingMutation,
-} from "../../service/admin/account/ApiEmployee";
+} from "../../service/account/ApiEmployee";
 // ^ Sesuaikan path import API Anda
 
 const { TextArea } = Input;

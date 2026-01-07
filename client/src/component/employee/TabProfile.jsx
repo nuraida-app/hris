@@ -11,7 +11,7 @@ import {
   Flex,
 } from "antd";
 import moment from "moment";
-import { useSaveEmployeeMutation } from "../../service/admin/account/ApiEmployee";
+import { useSaveEmployeeMutation } from "../../service/account/ApiEmployee";
 
 const TabProfile = ({ data }) => {
   const [form] = Form.useForm();

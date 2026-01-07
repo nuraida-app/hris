@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { Op } from "sequelize";
-import db from "../../../config/config.js";
+import db from "../../config/config.js";
 import {
   LeaveRequest,
   LeaveType,
@@ -8,15 +8,10 @@ import {
   User,
   Department,
   Position,
-} from "../../../models/index.js";
+} from "../../models/index.js";
 // Import String Constants dari Messages.js
-import {
-  created,
-  notFound,
-  removed,
-  updated,
-} from "../../../utils/Messages.js"; //
-import authorizeRole from "../../../middleware/authorizeRole.js";
+import { created, notFound, removed, updated } from "../../utils/Messages.js"; //
+import authorizeRole from "../../middleware/authorizeRole.js";
 
 const router = Router();
 

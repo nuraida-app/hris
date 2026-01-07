@@ -4,7 +4,7 @@ import { DeleteOutlined, ReloadOutlined } from "@ant-design/icons";
 import {
   useGetTablesQuery,
   useCleanTablesMutation,
-} from "../../../service/admin/database/ApiDatabase"; // Sesuaikan path
+} from "../../../service/database/ApiDatabase"; // Sesuaikan path
 
 const ManageDb = () => {
   const { data: tablesData, isLoading, refetch } = useGetTablesQuery();

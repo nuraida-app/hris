@@ -1,28 +1,23 @@
 import { Router } from "express";
 import bcrypt from "bcrypt";
 import { Op } from "sequelize";
-import db from "../../../config/config.js";
-import {
-  created,
-  notFound,
-  removed,
-  updated,
-} from "../../../utils/Messages.js";
-import authorizeRole from "../../../middleware/authorizeRole.js";
+import db from "../../config/config.js";
+import { created, notFound, removed, updated } from "../../utils/Messages.js";
+import authorizeRole from "../../middleware/authorizeRole.js";
 import fs from "fs";
 import path from "path";
 import multer from "multer";
 
 // Import Semua Model Terkait
-import User from "../../../models/master/User.js";
-import Employee from "../../../models/employee/Employee.js";
-import Department from "../../../models/master/Department.js";
-import Position from "../../../models/master/Position.js";
-import FamilyMember from "../../../models/employee/FamilyMember.js"; // Pastikan file ini ada
-import EmployeeDocument from "../../../models/employee/EmployeeDocument.js"; // Pastikan file ini ada
-import CareerHistory from "../../../models/employee/CareerHistory.js";
-import EducationHistory from "../../../models/employee/EducationHistory.js";
-import TrainingHistory from "../../../models/employee/TrainingHistory.js";
+import User from "../../models/master/User.js";
+import Employee from "../../models/employee/Employee.js";
+import Department from "../../models/master/Department.js";
+import Position from "../../models/master/Position.js";
+import FamilyMember from "../../models/employee/FamilyMember.js"; // Pastikan file ini ada
+import EmployeeDocument from "../../models/employee/EmployeeDocument.js"; // Pastikan file ini ada
+import CareerHistory from "../../models/employee/CareerHistory.js";
+import EducationHistory from "../../models/employee/EducationHistory.js";
+import TrainingHistory from "../../models/employee/TrainingHistory.js";
 
 const router = Router();
 
@@ -758,6 +753,80 @@ router.delete(
       if (!deleted)
         return res.status(404).json({ message: "Data tidak ditemukan" });
       res.status(200).json({ message: "Data pelatihan dihapus" });
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  }
+);
+
+// =========================================================================
+// 9. MANUAL CAREER HISTORY MANAGEMENT
+// Endpoint: /api/employee/career/save
+// =========================================================================
+router.post(
+  "/career/save",
+  authorizeRole(["admin", "hr_staff"]),
+  async (req, res) => {
+    try {
+      const {
+        id, // Jika edit history
+        employeeId,
+        departmentId,
+        positionId,
+        startDate,
+        endDate,
+        type,
+        notes,
+      } = req.body;
+
+      if (id) {
+        // --- UPDATE EXISTING HISTORY ---
+        const history = await CareerHistory.findByPk(id);
+        if (!history) {
+          return res.status(404).json({ message: "Riwayat tidak ditemukan" });
+        }
+        await history.update({
+          departmentId,
+          positionId,
+          startDate,
+          endDate: endDate || null,
+          type,
+          notes,
+        });
+        return res.status(200).json({ message: "Riwayat berhasil diperbarui" });
+      } else {
+        // --- CREATE NEW HISTORY ---
+        await CareerHistory.create({
+          employeeId,
+          departmentId,
+          positionId,
+          startDate,
+          endDate: endDate || null,
+          type,
+          notes,
+        });
+        return res
+          .status(201)
+          .json({ message: "Riwayat berhasil ditambahkan" });
+      }
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: error.message });
+    }
+  }
+);
+
+router.delete(
+  "/career/delete/:id",
+  authorizeRole(["admin"]),
+  async (req, res) => {
+    try {
+      const deleted = await CareerHistory.destroy({
+        where: { id: req.params.id },
+      });
+      if (!deleted)
+        return res.status(404).json({ message: "Data tidak ditemukan" });
+      res.status(200).json({ message: "Riwayat berhasil dihapus" });
     } catch (error) {
       res.status(500).json({ message: error.message });
     }

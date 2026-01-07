@@ -1,6 +1,6 @@
 import { Form, Input, message, Modal } from "antd";
 import React, { useEffect } from "react";
-import { useAddAdminMutation } from "../../../../service/admin/account/ApiAdmin";
+import { useAddAdminMutation } from "../../../../service/account/ApiAdmin";
 
 const AddAdmin = ({ title, open, onClose, payload }) => {
   const [form] = Form.useForm();

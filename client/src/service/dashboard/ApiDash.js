@@ -25,6 +25,10 @@ export const ApiDash = createApi({
       query: () => "/new-hires",
       providesTags: ["Dashboard"],
     }),
+    getEmployeeSummary: builder.query({
+      query: () => "/employee-summary",
+      providesTags: ["EmployeeDash"],
+    }),
   }),
 });
 
@@ -34,4 +38,5 @@ export const {
   useGetEmployeeDemographicsQuery,
   useGetNewHiresQuery,
   useGetPendingLeavesQuery,
+  useGetEmployeeSummaryQuery,
 } = ApiDash;

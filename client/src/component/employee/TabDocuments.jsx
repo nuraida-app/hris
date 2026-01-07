@@ -19,7 +19,7 @@ import {
 import {
   useSaveDocumentMutation,
   useDeleteDocumentMutation,
-} from "../../service/admin/account/ApiEmployee";
+} from "../../service/account/ApiEmployee";
 
 const { Dragger } = Upload; // Gunakan Dragger untuk UX yang lebih bagus
 

@@ -104,6 +104,22 @@ export const ApiEmployee = createApi({
       }),
       invalidatesTags: ["EmployeeDetail"],
     }),
+    saveCareerHistory: builder.mutation({
+      query: (body) => ({
+        url: "/career/save",
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["EmployeeDetail"], // Agar UI otomatis refresh
+    }),
+
+    deleteCareerHistory: builder.mutation({
+      query: (id) => ({
+        url: `/career/delete/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["EmployeeDetail"],
+    }),
   }),
 });
 
@@ -120,4 +136,6 @@ export const {
   useDeleteEduMutation,
   useSaveTrainingMutation,
   useDeleteTrainingMutation,
+  useSaveCareerHistoryMutation,
+  useDeleteCareerHistoryMutation,
 } = ApiEmployee;

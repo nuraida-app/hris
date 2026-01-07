@@ -16,7 +16,7 @@ import moment from "moment";
 import {
   useSaveFamilyMutation,
   useDeleteFamilyMutation,
-} from "../../service/admin/account/ApiEmployee";
+} from "../../service/account/ApiEmployee";
 
 const TabFamily = ({ data, employeeId }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);

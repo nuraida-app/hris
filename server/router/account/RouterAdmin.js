@@ -1,14 +1,9 @@
 import { Router } from "express";
 import bcrypt from "bcrypt";
 import { Op } from "sequelize";
-import User from "../../../models/master/User.js";
-import {
-  created,
-  notFound,
-  removed,
-  updated,
-} from "../../../utils/Messages.js";
-import authorizeRole from "../../../middleware/authorizeRole.js";
+import User from "../../models/master/User.js";
+import { created, notFound, removed, updated } from "../../utils/Messages.js";
+import authorizeRole from "../../middleware/authorizeRole.js";
 
 const router = Router();
 

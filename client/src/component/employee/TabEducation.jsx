@@ -28,7 +28,7 @@ import {
 import {
   useSaveEduMutation,
   useDeleteEduMutation,
-} from "../../service/admin/account/ApiEmployee";
+} from "../../service/account/ApiEmployee";
 
 const { Text, Title } = Typography;
 const { TextArea } = Input;

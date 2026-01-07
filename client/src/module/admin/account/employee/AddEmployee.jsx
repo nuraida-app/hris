@@ -10,7 +10,7 @@ import {
 } from "antd";
 import React, { useEffect, useState } from "react"; // Tambah useState
 import moment from "moment";
-import { useSaveEmployeeMutation } from "../../../../service/admin/account/ApiEmployee";
+import { useSaveEmployeeMutation } from "../../../../service/account/ApiEmployee";
 import { useDepFilterQuery } from "../../../../service/master/ApiDep";
 
 const AddEmployee = ({ title, open, onClose, payload }) => {

@@ -1,11 +1,6 @@
 import { Router } from "express";
-import Holiday from "../../../models/master/Holiday.js";
-import {
-  created,
-  notFound,
-  removed,
-  updated,
-} from "../../../utils/Messages.js";
+import Holiday from "../../models/master/Holiday.js";
+import { created, notFound, removed, updated } from "../../utils/Messages.js";
 
 const router = Router();
 
