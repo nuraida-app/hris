@@ -1,21 +1,33 @@
-import { Flex, Spin, Typography } from "antd";
-import React from "react";
+import { Spin, Typography } from "antd";
+import "./LoadingScreen.css";
 
-const LoadingScreen = () => {
+const { Text } = Typography;
+
+const LoadingScreen = ({
+  message = "Memuat halaman...",
+  subMessage = "Mohon tunggu sebentar",
+  fullScreen = true,
+}) => {
   return (
-    <Flex
-      style={{
-        height: "100vh",
-        backgroundColor: "rgba(0,0,0,0.4)",
-      }}
-      align="center"
-      justify="center"
-      gap={24}
-      vertical
+    <div
+      className={`loading-screen ${
+        fullScreen ? "loading-screen--fullscreen" : "loading-screen--embedded"
+      }`}
+      role="status"
+      aria-live="polite"
+      aria-label={message}
     >
-      <Spin size="large" />
-      <Typography style={{ color: "#fff" }}>Memuat Applikasi...</Typography>
-    </Flex>
+      <img
+        src={fullScreen ? "/logo.png" : "/favicon.png"}
+        alt="NURAIDA HRIS"
+        className="loading-screen__logo"
+      />
+      <Spin size="large" className="loading-screen__spinner" />
+      <Text className="loading-screen__text">{message}</Text>
+      {subMessage && (
+        <Text className="loading-screen__subtext">{subMessage}</Text>
+      )}
+    </div>
   );
 };
 

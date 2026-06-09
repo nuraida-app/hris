@@ -1,0 +1,217 @@
+.absent-page {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.absent-page__intro {
+  padding: 20px 24px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #faf7fb 0%, #f3e6ef 100%);
+  border: 1px solid rgba(106, 46, 111, 0.1);
+}
+
+.absent-page__intro-title {
+  margin: 0 0 6px !important;
+  font-size: 18px !important;
+  font-weight: 600 !important;
+  color: #6a2e6f !important;
+}
+
+.absent-page__intro-desc {
+  margin: 0 !important;
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.55);
+  line-height: 1.5;
+}
+
+.absent-page__stats {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+}
+
+@media (max-width: 991px) {
+  .absent-page__stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .absent-page__stats {
+    grid-template-columns: 1fr;
+  }
+}
+
+.absent-page__stat {
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(106, 46, 111, 0.08);
+  background: #ffffff;
+  box-shadow: 0 2px 8px rgba(74, 31, 78, 0.04);
+}
+
+.absent-page__stat-label {
+  display: block;
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.45);
+  margin-bottom: 4px;
+}
+
+.absent-page__stat-value {
+  display: block;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.absent-page__stat--total .absent-page__stat-value {
+  color: #6a2e6f;
+}
+
+.absent-page__stat--present .absent-page__stat-value {
+  color: #389e0d;
+}
+
+.absent-page__stat--late .absent-page__stat-value {
+  color: #d48806;
+}
+
+.absent-page__stat--permission .absent-page__stat-value {
+  color: #1677ff;
+}
+
+.absent-page__stat--absent .absent-page__stat-value {
+  color: #cf1322;
+}
+
+.absent-page__panel {
+  border-radius: 14px !important;
+  border: 1px solid rgba(106, 46, 111, 0.08) !important;
+  box-shadow: 0 2px 10px rgba(74, 31, 78, 0.04) !important;
+}
+
+.absent-page__panel .ant-card-head {
+  border-bottom: 1px solid rgba(106, 46, 111, 0.08);
+  min-height: 52px;
+}
+
+.absent-page__panel .ant-card-head-title {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.absent-page__toolbar {
+  margin-bottom: 16px;
+}
+
+.absent-page__filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.absent-page__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+@media (max-width: 767px) {
+  .absent-page__actions {
+    justify-content: flex-start;
+  }
+}
+
+.absent-page__table .ant-table-thead > tr > th {
+  background: #faf7fb !important;
+  font-size: 13px;
+}
+
+.absent-page__table .ant-table-tbody > tr:hover > td {
+  background: #faf7fb !important;
+}
+
+.absent-modal .ant-modal-header {
+  padding: 18px 24px;
+  border-bottom: 1px solid rgba(106, 46, 111, 0.08);
+  background: linear-gradient(135deg, #faf7fb 0%, #ffffff 100%);
+}
+
+.absent-modal .ant-modal-title {
+  font-size: 17px;
+  font-weight: 600;
+  color: #6a2e6f;
+}
+
+.absent-modal .ant-modal-body {
+  padding: 20px 24px 8px;
+}
+
+.absent-modal .ant-modal-footer {
+  padding: 14px 24px;
+  border-top: 1px solid rgba(106, 46, 111, 0.08);
+}
+
+.absent-modal .ant-form-item-label > label {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.absent-modal .ant-input,
+.absent-modal .ant-select-selector,
+.absent-modal .ant-picker {
+  border-radius: 8px !important;
+}
+
+.absent-import__steps {
+  padding: 16px;
+  border-radius: 12px;
+  background: #faf7fb;
+  border: 1px solid rgba(106, 46, 111, 0.1);
+  margin-bottom: 16px;
+}
+
+.absent-import__steps-title {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #6a2e6f;
+}
+
+.absent-import__steps-list {
+  margin: 0 0 12px;
+  padding-left: 20px;
+  font-size: 13px;
+  color: rgba(0, 0, 0, 0.65);
+  line-height: 1.6;
+}
+
+.absent-import__template-btn {
+  padding: 0 !important;
+  height: auto !important;
+  font-weight: 500;
+}
+
+.absent-import__dragger {
+  border-radius: 12px !important;
+  border-color: rgba(106, 46, 111, 0.2) !important;
+  background: #ffffff !important;
+}
+
+.absent-import__dragger:hover {
+  border-color: #6a2e6f !important;
+}
+
+.absent-import__loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 12px;
+  font-size: 13px;
+  color: rgba(0, 0, 0, 0.55);
+}

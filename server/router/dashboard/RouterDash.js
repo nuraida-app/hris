@@ -168,11 +168,16 @@ router.get("/pending-leaves", authorizeRole(["admin"]), async (req, res) => {
       include: [
         {
           model: Employee,
-          as: "employee", // <--- PERBAIKAN DI SINI (Wajib pakai alias)
+          as: "employee",
           attributes: ["fullName", "nip"],
           include: [
             { model: Department, as: "department", attributes: ["name"] },
           ],
+        },
+        {
+          model: LeaveType,
+          as: "leaveType",
+          attributes: ["name"],
         },
       ],
     });

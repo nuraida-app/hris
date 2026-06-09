@@ -1,5 +1,5 @@
 import {
-  WindowsOutlined,
+  AppstoreOutlined,
   UsergroupAddOutlined,
   SolutionOutlined,
   LogoutOutlined,
@@ -7,13 +7,22 @@ import {
   CarryOutOutlined,
   CloudServerOutlined,
   UserOutlined,
+  HomeOutlined,
 } from "@ant-design/icons";
 
-export const adminMenus = [
+export const ROLE_LABELS = {
+  admin: "Administrator",
+  hr_staff: "Staf HR",
+  employee: "Pegawai",
+};
+
+export const getRoleLabel = (role) => ROLE_LABELS[role] ?? "Pengguna";
+
+export const adminNavItems = [
   {
     label: "Dashboard",
     key: "/admin-dashboard",
-    icon: <WindowsOutlined />,
+    icon: <AppstoreOutlined />,
   },
   {
     label: "Data Master",
@@ -40,23 +49,30 @@ export const adminMenus = [
     key: "/admin-database",
     icon: <CloudServerOutlined />,
   },
-  {
-    label: "Logout",
-    key: "logout",
-    icon: <LogoutOutlined />,
-    danger: true,
-  },
 ];
 
-export const userMenus = [
+export const userNavItems = [
   {
     label: "Dashboard",
     key: "/dashboard",
-    icon: <WindowsOutlined />,
+    icon: <HomeOutlined />,
   },
   {
-    label: "Profile",
+    label: "Profil",
     key: "/profile",
     icon: <UserOutlined />,
   },
 ];
+
+export const logoutItem = {
+  key: "logout",
+  label: "Keluar",
+  icon: <LogoutOutlined />,
+  danger: true,
+};
+
+/** @deprecated Use adminNavItems + logoutItem */
+export const adminMenus = [...adminNavItems, logoutItem];
+
+/** @deprecated Use userNavItems + logoutItem */
+export const userMenus = [...userNavItems, logoutItem];

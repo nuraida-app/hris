@@ -1,63 +1,64 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { ApiAuth } from "./ApiAuth";
-import { setSignIn, setSignOut } from "../../utils/auth";
+import { isAuthenticated, setSignIn, setSignOut } from "../../utils/auth";
 
 const UserSlice = createSlice({
   name: "auth",
   initialState: {
     user: null,
-    isLoading: true, // Default true agar saat refresh kita menunggu loadUser selesai
+    isBootstrapping: isAuthenticated(),
   },
   reducers: {
-    setUser: (state, action) => {
-      state.user = action.payload;
+    finishBootstrap: (state) => {
+      state.isBootstrapping = false;
     },
     clearUser: (state) => {
       state.user = null;
+      state.isBootstrapping = false;
       setSignOut();
     },
   },
   extraReducers: (builder) => {
-    // --- LOGIN HANDLER ---
-    builder.addMatcher(
-      ApiAuth.endpoints.login.matchFulfilled,
-      (state, action) => {
-        state.user = action.payload; // Set user dari respon login
-        state.isLoading = false;
-        setSignIn(); // Set localStorage
-      }
-    );
-
-    // --- LOAD USER HANDLER (Inti permintaan Anda) ---
-    builder.addMatcher(ApiAuth.endpoints.loadUser.matchPending, (state) => {
-      state.isLoading = true;
-    });
-
-    // Ketika load user BERHASIL -> Set ke state.user
-    builder.addMatcher(
-      ApiAuth.endpoints.loadUser.matchFulfilled,
-      (state, action) => {
-        state.user = action.payload;
-        state.isLoading = false;
-        setSignIn(); // Pastikan tetap true di localStorage
-      }
-    );
-
-    // Ketika load user GAGAL (misal token expired) -> Logout otomatis
-    builder.addMatcher(ApiAuth.endpoints.loadUser.matchRejected, (state) => {
-      state.user = null;
-      state.isLoading = false;
-      setSignOut(); // Bersihkan localStorage
-    });
-
-    // --- LOGOUT HANDLER ---
-    builder.addMatcher(ApiAuth.endpoints.logout.matchFulfilled, (state) => {
-      state.user = null;
-      state.isLoading = false;
-      setSignOut();
-    });
+    builder
+      .addMatcher(ApiAuth.endpoints.login.matchPending, (state) => {
+        state.isBootstrapping = true;
+      })
+      .addMatcher(
+        ApiAuth.endpoints.login.matchFulfilled,
+        (state, action) => {
+          state.user = action.payload;
+          state.isBootstrapping = false;
+          setSignIn();
+        }
+      )
+      .addMatcher(ApiAuth.endpoints.login.matchRejected, (state) => {
+        state.isBootstrapping = false;
+      })
+      .addMatcher(ApiAuth.endpoints.loadUser.matchPending, (state) => {
+        if (isAuthenticated()) {
+          state.isBootstrapping = true;
+        }
+      })
+      .addMatcher(
+        ApiAuth.endpoints.loadUser.matchFulfilled,
+        (state, action) => {
+          state.user = action.payload;
+          state.isBootstrapping = false;
+          setSignIn();
+        }
+      )
+      .addMatcher(ApiAuth.endpoints.loadUser.matchRejected, (state) => {
+        state.user = null;
+        state.isBootstrapping = false;
+        setSignOut();
+      })
+      .addMatcher(ApiAuth.endpoints.logout.matchFulfilled, (state) => {
+        state.user = null;
+        state.isBootstrapping = false;
+        setSignOut();
+      });
   },
 });
 
-export const { setUser, clearUser } = UserSlice.actions;
+export const { finishBootstrap, clearUser } = UserSlice.actions;
 export default UserSlice.reducer;

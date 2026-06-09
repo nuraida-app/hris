@@ -1,0 +1,81 @@
+.add-employee-modal .ant-modal-header {
+  padding: 18px 24px;
+  border-bottom: 1px solid rgba(106, 46, 111, 0.08);
+  background: linear-gradient(135deg, #faf7fb 0%, #ffffff 100%);
+}
+
+.add-employee-modal .ant-modal-title {
+  font-size: 17px;
+  font-weight: 600;
+  color: #6a2e6f;
+}
+
+.add-employee-modal .ant-modal-body {
+  padding: 20px 24px 8px;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.add-employee-modal .ant-modal-footer {
+  padding: 14px 24px;
+  border-top: 1px solid rgba(106, 46, 111, 0.08);
+}
+
+.add-employee__section {
+  margin-bottom: 8px;
+}
+
+.add-employee__section-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #6a2e6f;
+}
+
+.add-employee__section-title .anticon {
+  font-size: 14px;
+}
+
+.add-employee-modal .ant-divider-horizontal.ant-divider-with-text {
+  margin: 20px 0 16px;
+  border-color: rgba(106, 46, 111, 0.1);
+}
+
+.add-employee-modal .ant-form-item-label > label {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.add-employee-modal .ant-input,
+.add-employee-modal .ant-select-selector,
+.add-employee-modal .ant-picker {
+  border-radius: 8px !important;
+}
+
+.add-employee-modal .ant-input:focus,
+.add-employee-modal .ant-select-focused .ant-select-selector,
+.add-employee-modal .ant-picker-focused {
+  border-color: #6a2e6f !important;
+  box-shadow: 0 0 0 2px rgba(106, 46, 111, 0.12) !important;
+}
+
+.add-employee__hint {
+  display: block;
+  margin-top: -8px;
+  margin-bottom: 12px;
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.45);
+}
+
+@media (max-width: 767px) {
+  .add-employee-modal {
+    max-width: calc(100vw - 32px) !important;
+  }
+
+  .add-employee-modal .ant-modal-body {
+    max-height: 65vh;
+    padding: 16px;
+  }
+}

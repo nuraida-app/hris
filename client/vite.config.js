@@ -1,19 +1,21 @@
-import { defineConfig, loadEnv } from "vite";
+import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
+const BACKEND_URL = "http://localhost:2024";
+
 export default defineConfig(({ mode }) => {
-  const env = loadEnv(mode, process.cwd(), "");
-  const apiUrl = env.VITE_API_URL;
-
-  console.log("Current mode:", mode);
-  console.log("Using API URL:", apiUrl);
-
   return {
     plugins: [react()],
     server: {
       proxy: {
-        "/api": apiUrl,
-        "/assets": apiUrl,
+        "/api": {
+          target: BACKEND_URL,
+          changeOrigin: true,
+        },
+        "/assets": {
+          target: BACKEND_URL,
+          changeOrigin: true,
+        },
       },
     },
     build: {

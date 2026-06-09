@@ -198,6 +198,9 @@ Employee.init(
       allowNull: false,
       unique: true,
     },
+    nuptk: {
+      type: DataTypes.STRING(25),
+    },
     fullName: {
       type: DataTypes.STRING,
       allowNull: false,

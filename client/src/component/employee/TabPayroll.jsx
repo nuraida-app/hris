@@ -15,7 +15,7 @@ const TabPayroll = ({ data }) => {
       await saveEmployee({ id: data.id, ...values }).unwrap();
       message.success("Data Payroll & Legal diperbarui");
     } catch (error) {
-      message.error("Gagal update data");
+      message.error(error?.data?.message || "Gagal update data");
     }
   };
 

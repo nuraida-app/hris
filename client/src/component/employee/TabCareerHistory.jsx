@@ -149,7 +149,7 @@ const TabCareerHistory = ({ data }) => {
       variant="borderless"
       title="Perjalanan Karir"
       extra={
-        user?.role === "admin" && (
+        (user?.role === "admin" || user?.role === "hr_staff") && (
           <Button
             type="primary"
             icon={<PlusOutlined />}

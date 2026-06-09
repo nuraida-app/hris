@@ -115,6 +115,12 @@ const Employee = () => {
       key: "nip",
     },
     {
+      title: "NUPTK",
+      dataIndex: "nuptk",
+      key: "nuptk",
+      render: (nuptk) => nuptk || "-",
+    },
+    {
       title: "Nama Lengkap",
       dataIndex: "fullName", // Sesuai model Employee
       key: "fullName",
@@ -165,7 +171,7 @@ const Employee = () => {
         </Title>
         <Space>
           <Input
-            placeholder="Cari (Nama, NIP, Email)..."
+            placeholder="Cari (Nama, NIP, NUPTK, Email)..."
             allowClear
             value={search}
             onChange={(e) => setSearch(e.target.value)}

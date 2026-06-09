@@ -1,25 +1,23 @@
 import jwt from "jsonwebtoken";
 
+const JWT_SECRET = process.env.JWT_SECRET || "your_default_secret";
+
 /**
  * Middleware untuk memverifikasi token dan mengotorisasi akses berdasarkan peran (role).
  * @param {string[]} allowedRoles - Array dari peran ('role') yang diizinkan untuk mengakses endpoint ini.
  */
 export default function authorizeRole(allowedRoles) {
   return (req, res, next) => {
-    // 1. Ambil Token dari Cookies (Sesuai implementasi Anda)
-    const token = req.cookies.token;
+    const token = req.cookies?.token;
 
-    // 2. Periksa keberadaan token (Autentikasi)
     if (!token) {
       return res.status(401).json({
-        success: false,
-        message: "Akses ditolak. Tidak ada token otorisasi.",
+        message: "Sesi tidak valid, silakan login",
       });
     }
 
-    // 3. Verifikasi Token
     try {
-      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      const decoded = jwt.verify(token, JWT_SECRET);
 
       // Simpan data user yang sudah di-decode
       req.user = decoded.user;

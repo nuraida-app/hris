@@ -1,13 +1,21 @@
+const SIGNIN_KEY = "isSignin";
+
 export const isAuthenticated = () => {
-  return localStorage.getItem("isSignin") === "true";
+  return localStorage.getItem(SIGNIN_KEY) === "true";
 };
 
 export const setSignIn = () => {
-  localStorage.setItem("isSignin", "true");
+  localStorage.setItem(SIGNIN_KEY, "true");
 };
 
 export const setSignOut = () => {
-  localStorage.removeItem("isSignin");
-  // This should also clear the cookie from the browser
-  document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+  localStorage.removeItem(SIGNIN_KEY);
+};
+
+export const isAdminRole = (role) => {
+  return role === "admin" || role === "hr_staff";
+};
+
+export const getDefaultRoute = (role) => {
+  return isAdminRole(role) ? "/admin-dashboard" : "/dashboard";
 };

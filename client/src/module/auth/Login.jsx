@@ -1,187 +1,144 @@
 import React, { useEffect } from "react";
-import { Form, Input, Button, Checkbox, message } from "antd";
+import {
+  ConfigProvider,
+  Form,
+  Input,
+  Button,
+  Checkbox,
+  message,
+  Typography,
+} from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
-import { useLoadUserQuery, useLoginMutation } from "../../service/auth/ApiAuth";
+import { useLoginMutation } from "../../service/auth/ApiAuth";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { isAuthenticated } from "../../utils/auth";
+import { getDefaultRoute } from "../../utils/auth";
+import "./Login.css";
 
-// --- KONFIGURASI WARNA DARI LOGO ---
-const colors = {
-  primary: "#6A2E6F", // Ungu Tua (NURAIDA)
-  lightPurple: "#8E5F92", // Ungu lebih terang untuk gradasi
-  softPurple: "#B28FB5", // Ungu lembut untuk gradasi
-  textWhite: "#ffffff",
-  textLightGray: "#f0f0f0", // Untuk placeholder dan teks ringan
-};
+const { Title, Text } = Typography;
 
-// Styles
-const containerStyle = {
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  height: "100vh",
-  background: `linear-gradient(135deg, ${colors.primary} 0%, ${colors.lightPurple} 100%)`,
-};
-
-const formContainerStyle = {
-  padding: "40px",
-  background: "rgba(255, 255, 255, 0.1)",
-  backdropFilter: "blur(5px)",
-  border: "1px solid rgba(255, 255, 255, 0.15)",
-  borderRadius: "15px",
-  boxShadow: "0 8px 32px 0 rgba(31, 38, 135, 0.25)",
-  width: "400px",
-  maxWidth: "90%",
+const theme = {
+  token: {
+    colorPrimary: "#6A2E6F",
+    borderRadius: 12,
+    controlHeightLG: 48,
+  },
 };
 
 const Login = () => {
   const navigate = useNavigate();
-
-  // Ambil user dari global state (UserSlice)
   const { user } = useSelector((state) => state.user);
+  const [login, { isLoading, reset }] = useLoginMutation();
 
-  // Login Mutation
-  const [login, { isLoading, isSuccess, error }] = useLoginMutation();
-
-  // Load User Query
-  // Logic: Query ini akan di-skip (tidak jalan) SELAMA login belum sukses (!isSuccess).
-  // Begitu login sukses, skip jadi false, dan query loadUser otomatis jalan.
-  useLoadUserQuery(undefined, {
-    skip: !isSuccess,
-  });
-
-  const onFinish = (values) => {
-    login(values);
+  const onFinish = async (values) => {
+    reset();
+    try {
+      const result = await login(values).unwrap();
+      message.success("Login berhasil!");
+      navigate(getDefaultRoute(result.role), { replace: true });
+    } catch (err) {
+      message.error(err?.data?.message || "Terjadi kesalahan saat login");
+    }
   };
 
-  // Effect: Menangani notifikasi Login
   useEffect(() => {
-    if (isSuccess) {
-      message.success("Login Berhasil!");
-    }
-    if (error) {
-      message.error(error?.data?.message || "Terjadi kesalahan saat login");
-    }
-  }, [isSuccess, error]);
-
-  // Effect: Redirect setelah User Data masuk ke Redux
-  useEffect(() => {
-    // Cek apakah user sudah ada di state dan token valid
-    if (user && isAuthenticated()) {
-      if (user.role === "admin") {
-        navigate("/admin-dashboard");
-      } else {
-        navigate("/dashboard");
-      }
+    if (user) {
+      navigate(getDefaultRoute(user.role), { replace: true });
     }
   }, [user, navigate]);
 
   return (
-    <div style={containerStyle}>
-      <div style={formContainerStyle}>
-        <Form
-          name="normal_login"
-          initialValues={{
-            remember: true,
-          }}
-          onFinish={onFinish}
-        >
-          <img
-            src="/logo.png"
-            alt="logo"
-            width={"100%"}
-            style={{
-              marginBottom: 24,
-              maxWidth: "250px",
-              display: "block",
-              margin: "0 auto 24px auto",
-            }}
-          />
+    <ConfigProvider theme={theme}>
+      <div className='login-page'>
+        <div className='login-page__bg' aria-hidden='true'>
+          <div className='login-page__orb login-page__orb--1' />
+          <div className='login-page__orb login-page__orb--2' />
+          <div className='login-page__orb login-page__orb--3' />
+        </div>
 
-          <Form.Item
-            name="username"
-            rules={[
-              {
-                required: true,
-                message: "Please input your Username!",
-              },
-            ]}
+        <div className='login-card'>
+          <div className='login-card__header'>
+            <Title level={3} className='login-card__title'>
+              Selamat Datang
+            </Title>
+            <Text className='login-card__subtitle'>
+              Masuk ke sistem HRIS untuk melanjutkan
+            </Text>
+          </div>
+
+          <Form
+            name='login'
+            className='login-form'
+            layout='vertical'
+            initialValues={{ remember: true }}
+            onFinish={onFinish}
+            requiredMark={false}
           >
-            <Input
-              prefix={<UserOutlined className="site-form-item-icon" />}
-              placeholder="Username"
-              size="large"
-              style={{
-                backgroundColor: "rgba(255, 255, 255, 0.8)",
-                borderColor: "transparent",
-                color: colors.primary,
-              }}
-              className="login-input-icon"
-            />
-          </Form.Item>
-          <Form.Item
-            name="password"
-            rules={[
-              {
-                required: true,
-                message: "Please input your Password!",
-              },
-            ]}
-          >
-            <Input.Password
-              prefix={<LockOutlined className="site-form-item-icon" />}
-              type="password"
-              placeholder="Password"
-              size="large"
-              style={{
-                backgroundColor: "rgba(255, 255, 255, 0.8)",
-                borderColor: "transparent",
-                color: colors.primary,
-              }}
-              className="login-input-icon"
-            />
-          </Form.Item>
-          <Form.Item>
-            <Form.Item name="remember" valuePropName="checked" noStyle>
-              <Checkbox style={{ color: colors.textLightGray }}>
-                Remember me
-              </Checkbox>
+            <Form.Item
+              name='username'
+              label={
+                <span style={{ color: "rgba(255,255,255,0.9)" }}>Username</span>
+              }
+              rules={[{ required: true, message: "Masukkan username" }]}
+            >
+              <Input
+                prefix={<UserOutlined />}
+                placeholder='Masukkan username Anda'
+                size='large'
+                autoComplete='username'
+              />
             </Form.Item>
-            <a
-              href="#forgot"
-              style={{ float: "right", color: colors.textLightGray }}
-            >
-              Lupa Password
-            </a>
-          </Form.Item>
 
-          <Form.Item>
-            <Button
-              type="primary"
-              htmlType="submit"
-              block
-              loading={isLoading}
-              size="large"
-              style={{
-                backgroundColor: colors.primary,
-                borderColor: colors.primary,
-                marginTop: "10px",
-              }}
+            <Form.Item
+              name='password'
+              label={
+                <span style={{ color: "rgba(255,255,255,0.9)" }}>Password</span>
+              }
+              rules={[{ required: true, message: "Masukkan password" }]}
             >
-              Masuk
-            </Button>
-          </Form.Item>
-        </Form>
+              <Input.Password
+                prefix={<LockOutlined />}
+                placeholder='Masukkan password Anda'
+                size='large'
+                autoComplete='current-password'
+              />
+            </Form.Item>
+
+            <Form.Item className='login-form__options'>
+              <Form.Item name='remember' valuePropName='checked' noStyle>
+                <Checkbox className='login-form__remember'>Ingat saya</Checkbox>
+              </Form.Item>
+              <a
+                className='login-form__forgot'
+                href='#forgot'
+                onClick={(e) => e.preventDefault()}
+              >
+                Lupa Password
+              </a>
+            </Form.Item>
+
+            <Form.Item>
+              <Button
+                type='primary'
+                htmlType='submit'
+                block
+                loading={isLoading}
+                size='large'
+                className='login-form__submit'
+              >
+                Masuk
+              </Button>
+            </Form.Item>
+          </Form>
+
+          <div className='login-card__footer'>
+            <Text className='login-card__footer-text'>
+              SMP - SMA NURAIDA Islamic Boarding School
+            </Text>
+          </div>
+        </div>
       </div>
-      <style>
-        {`
-          .login-input-icon .anticon {
-            color: ${colors.primary} !important;
-          }
-        `}
-      </style>
-    </div>
+    </ConfigProvider>
   );
 };
 

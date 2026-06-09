@@ -75,6 +75,7 @@ router.get(
             [Op.or]: [
               { fullName: { [Op.iLike]: `%${search}%` } },
               { nip: { [Op.iLike]: `%${search}%` } },
+              { nuptk: { [Op.iLike]: `%${search}%` } },
               { "$account.username$": { [Op.iLike]: `%${search}%` } },
             ],
           }
@@ -200,6 +201,7 @@ router.post("/save", authorizeRole(["admin"]), async (req, res) => {
       role,
       // Basic Info
       nip,
+      nuptk,
       fullName,
       joinDate,
       status,
@@ -234,47 +236,103 @@ router.post("/save", authorizeRole(["admin"]), async (req, res) => {
       }
 
       // Cek apakah ada perubahan Jabatan atau Departemen
-      const oldPositionId = employee.positionId;
-      const oldDepartmentId = employee.departmentId;
-      const isPositionChanged = oldPositionId !== positionId;
-      const isDeptChanged = oldDepartmentId !== departmentId;
+      const newDepartmentId =
+        departmentId !== undefined ? departmentId : employee.departmentId;
+      const newPositionId =
+        positionId !== undefined ? positionId : employee.positionId;
+      const isPositionChanged = employee.positionId !== newPositionId;
+      const isDeptChanged = employee.departmentId !== newDepartmentId;
 
-      // 2. Update Data Employee Utama
-      await employee.update(
-        {
-          nip,
-          fullName,
-          joinDate,
-          status,
-          gender,
-          phone,
-          address,
-          departmentId,
-          positionId,
-          placeOfBirth,
-          dateOfBirth,
-          maritalStatus,
-          religion,
-          bloodType,
-          identityNumber,
-          bankName,
-          bankAccountNumber,
-          bankAccountHolder,
-          npwp,
-          bpjsKetenagakerjaan,
-          bpjsKesehatan,
-        },
-        { transaction: t }
-      );
+      // 2. Update Data Employee Utama (hanya field yang dikirim)
+      const employeeFields = {
+        nip,
+        nuptk,
+        fullName,
+        joinDate,
+        status,
+        gender,
+        phone,
+        address,
+        departmentId,
+        positionId,
+        placeOfBirth,
+        dateOfBirth,
+        maritalStatus,
+        religion,
+        bloodType,
+        identityNumber,
+        bankName,
+        bankAccountNumber,
+        bankAccountHolder,
+        npwp,
+        bpjsKetenagakerjaan,
+        bpjsKesehatan,
+      };
 
-      // 3. Update Data Akun (User)
+      const employeeUpdate = {};
+      for (const [key, value] of Object.entries(employeeFields)) {
+        if (value !== undefined) {
+          employeeUpdate[key] = key === "nuptk" ? value || null : value;
+        }
+      }
+
+      if (Object.keys(employeeUpdate).length > 0) {
+        await employee.update(employeeUpdate, { transaction: t });
+      }
+
+      // 3. Update Data Akun (User) — hanya jika field akun dikirim
       if (employee.account) {
-        const userUpdate = { username, email, role };
+        const userUpdate = {};
+
+        if (username !== undefined) {
+          const trimmedUsername = username?.trim();
+          if (trimmedUsername) {
+            const duplicateUsername = await User.findOne({
+              where: {
+                username: trimmedUsername,
+                id: { [Op.ne]: employee.account.id },
+              },
+              transaction: t,
+            });
+            if (duplicateUsername) {
+              await t.rollback();
+              return res
+                .status(400)
+                .json({ message: "Username sudah digunakan oleh akun lain." });
+            }
+            userUpdate.username = trimmedUsername;
+          }
+        }
+
+        if (email !== undefined) {
+          const trimmedEmail = email?.trim();
+          if (trimmedEmail) {
+            const duplicateEmail = await User.findOne({
+              where: {
+                email: trimmedEmail,
+                id: { [Op.ne]: employee.account.id },
+              },
+              transaction: t,
+            });
+            if (duplicateEmail) {
+              await t.rollback();
+              return res
+                .status(400)
+                .json({ message: "Email sudah digunakan oleh akun lain." });
+            }
+            userUpdate.email = trimmedEmail;
+          }
+        }
+
+        if (role !== undefined) userUpdate.role = role;
         if (password) {
           const salt = await bcrypt.genSalt(10);
           userUpdate.password = await bcrypt.hash(password, salt);
         }
-        await employee.account.update(userUpdate, { transaction: t });
+
+        if (Object.keys(userUpdate).length > 0) {
+          await employee.account.update(userUpdate, { transaction: t });
+        }
       }
 
       // 4. LOGIKA CAREER HISTORY (Jika ada perubahan posisi/dept)
@@ -301,8 +359,8 @@ router.post("/save", authorizeRole(["admin"]), async (req, res) => {
         await CareerHistory.create(
           {
             employeeId: id,
-            departmentId: departmentId, // Dept Baru
-            positionId: positionId, // Posisi Baru
+            departmentId: newDepartmentId,
+            positionId: newPositionId,
             startDate: today,
             type: historyType,
             notes: isPositionChanged
@@ -350,6 +408,7 @@ router.post("/save", authorizeRole(["admin"]), async (req, res) => {
         {
           userId: newUser.id,
           nip,
+          nuptk: nuptk || null,
           fullName,
           joinDate,
           status,
@@ -395,8 +454,23 @@ router.post("/save", authorizeRole(["admin"]), async (req, res) => {
         .json({ message: "Pegawai baru berhasil ditambahkan" });
     }
   } catch (error) {
-    await t.rollback();
+    if (!t.finished) {
+      await t.rollback();
+    }
     console.error(error);
+
+    if (error.name === "SequelizeUniqueConstraintError") {
+      const field = error.errors?.[0]?.path;
+      const messages = {
+        username: "Username sudah digunakan oleh akun lain.",
+        email: "Email sudah digunakan oleh akun lain.",
+        nip: "NIP sudah digunakan oleh pegawai lain.",
+      };
+      return res.status(400).json({
+        message: messages[field] || "Data duplikat, field sudah digunakan.",
+      });
+    }
+
     res.status(500).json({ message: error.message });
   }
 });

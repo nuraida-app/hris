@@ -39,7 +39,7 @@ const TabProfile = ({ data }) => {
       await saveEmployee(payload).unwrap();
       message.success("Profil berhasil diperbarui");
     } catch (error) {
-      message.error("Gagal memperbarui profil");
+      message.error(error?.data?.message || "Gagal memperbarui profil");
     }
   };
 
@@ -50,6 +50,9 @@ const TabProfile = ({ data }) => {
         <Col xs={24} md={12}>
           <Form.Item label="NIP" name="nip" rules={[{ required: true }]}>
             <Input />
+          </Form.Item>
+          <Form.Item label="NUPTK" name="nuptk">
+            <Input placeholder="Nomor Unik Pendidik dan Tenaga Kependidikan (opsional)" />
           </Form.Item>
           <Form.Item
             label="Nama Lengkap"
